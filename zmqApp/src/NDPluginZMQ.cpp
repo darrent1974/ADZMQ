@@ -95,7 +95,11 @@ bool NDPluginZMQ::sendNDArray(NDArray *pArray)
     std::ostringstream shape;
     std::ostringstream header;
     NDArrayInfo_t arrayInfo;
+    std::string scanID;
     const char* functionName = "sendNDArray";
+
+    /* Get the ScanID param */
+    getStringParam(NDPluginZMQScanID, scanID);
 
     pArray->getInfo(&arrayInfo);
 
@@ -141,6 +145,7 @@ bool NDPluginZMQ::sendNDArray(NDArray *pArray)
 #if ADCORE_VERSION >= 3
         << "\"encoding\":" << "\"" << pArray->codec.name << "\", "
 #endif
+        << "\"scanid\":" << "\"" << scanID << "\", "
         << "\"ndattr\":" << getAttributesAsJSON(pArray->pAttributeList)
         << "}";
 
@@ -312,6 +317,9 @@ NDPluginZMQ::NDPluginZMQ(const char *portName, const char* serverHost, int queue
         fprintf(stderr, "%s: Unsupported socket type %s\n", functionName, type);
         return;
     }
+
+    /* ZMQ general parameters */
+    createParam(NDPluginZMQScanIDString, asynParamOctet, &NDPluginZMQScanID);
 
     /* Set the plugin type string */
     setStringParam(NDPluginDriverPluginType, driverName);

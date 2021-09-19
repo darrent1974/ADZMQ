@@ -3,6 +3,9 @@
 
 #include "NDPluginDriver.h"
 
+/* ZMQ general parameters */
+#define NDPluginZMQScanIDString               "SCAN_ID"                /* (asynOctet,   r/w) Bluesky Scan ID string */
+
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 255
 #endif
@@ -21,6 +24,9 @@ public:
     virtual void processCallbacks(NDArray *pArray);
 
 protected:
+    /* ZMQ general parameters */
+    int NDPluginZMQScanID;
+
     std::string getAttributesAsJSON(NDAttributeList *pAttributeList);
     bool sendNDArray(NDArray *pArray);
 
