@@ -324,6 +324,9 @@ NDPluginZMQ::NDPluginZMQ(const char *portName, const char* serverHost, int queue
     /* Set the plugin type string */
     setStringParam(NDPluginDriverPluginType, driverName);
 
+    /* Set default scan id string */
+    setStringParam(NDPluginZMQScanID,        "");
+
     /* Create ZMQ pub socket */
     this->context = zmq_ctx_new();
     this->socket = zmq_socket(context, this->socketType);
