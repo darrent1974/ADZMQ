@@ -1,0 +1,26 @@
+#=================================================================#
+# Template file: ADZMQ.template
+# Database for the ADZMQ plugin
+# Darren Thompson
+# September 20, 2021
+
+include "NDPluginBase.template"
+
+# # ScanID string
+record(waveform, "$(P)$(R)ScanID")
+{
+    field(DTYP, "asynOctetWrite")
+    field(PINI, "YES")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SCAN_ID")
+    field(FTVL, "CHAR")
+    field(NELM, "256")
+}
+
+# # ScanID readback
+record(waveform, "$(P)$(R)ScanID_RBV") {
+  field(DTYP, "asynOctetRead")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SCAN_ID")
+  field(FTVL, "CHAR")
+  field(NELM, "256")
+  field(SCAN, "I/O Intr")
+}
