@@ -30,3 +30,5 @@ O.*
 /dbd
 /db
 
+/iocs/zmqIOC/bin/
+/iocs/zmqIOC/dbd/
