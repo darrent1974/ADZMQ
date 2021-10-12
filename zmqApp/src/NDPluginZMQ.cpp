@@ -95,11 +95,11 @@ bool NDPluginZMQ::sendNDArray(NDArray *pArray)
     std::ostringstream shape;
     std::ostringstream header;
     NDArrayInfo_t arrayInfo;
-    std::string scanID;
+    std::string topicID;
     const char* functionName = "sendNDArray";
 
-    /* Get the ScanID param */
-    getStringParam(NDPluginZMQScanID, scanID);
+    /* Get the TopicID param */
+    getStringParam(NDPluginZMQTopicID, topicID);
 
     pArray->getInfo(&arrayInfo);
 
@@ -145,9 +145,22 @@ bool NDPluginZMQ::sendNDArray(NDArray *pArray)
 #if ADCORE_VERSION >= 3
         << "\"encoding\":" << "\"" << pArray->codec.name << "\", "
 #endif
-        << "\"scanid\":" << "\"" << scanID << "\", "
+        << "\"topicid\":" << "\"" << topicID << "\", "
         << "\"ndattr\":" << getAttributesAsJSON(pArray->pAttributeList)
         << "}";
+
+    /* For a PUB socket send the topic id first */
+    if(this->socketType == ZMQ_PUB)       
+    {
+        zmq_msg_t msg_topic;
+        zmq_msg_init_size(&msg_topic, topicID.length());
+        memcpy(zmq_msg_data(&msg_topic), topicID.c_str(), topicID.length());
+        int rc = zmq_msg_send(&msg_topic, this->socket, ZMQ_SNDMORE|ZMQ_DONTWAIT);
+        if (rc == -1) {
+            zmq_msg_close(&msg_topic);
+            return false;
+        }
+    }
 
     /* Send header*/
     std::string msg = header.str();
@@ -319,13 +332,13 @@ NDPluginZMQ::NDPluginZMQ(const char *portName, const char* serverHost, int queue
     }
 
     /* ZMQ general parameters */
-    createParam(NDPluginZMQScanIDString, asynParamOctet, &NDPluginZMQScanID);
+    createParam(NDPluginZMQTopicIDString, asynParamOctet, &NDPluginZMQTopicID);
 
     /* Set the plugin type string */
     setStringParam(NDPluginDriverPluginType, driverName);
 
-    /* Set default scan id string */
-    setStringParam(NDPluginZMQScanID,        "");
+    /* Set default topic id string */
+    setStringParam(NDPluginZMQTopicID,        "");
 
     /* Create ZMQ pub socket */
     this->context = zmq_ctx_new();
