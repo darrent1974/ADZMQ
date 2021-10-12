@@ -17,7 +17,7 @@ record(waveform, "$(P)$(R)TopicID")
 }
 
 # # ScanID readback
-record(waveform, "$(P)$(R)ScanID_RBV") {
+record(waveform, "$(P)$(R)TopicID_RBV") {
   field(DTYP, "asynOctetRead")
   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))TOPIC_ID")
   field(FTVL, "CHAR")
