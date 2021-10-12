@@ -6,12 +6,12 @@
 
 include "NDPluginBase.template"
 
-# # ScanID string
-record(waveform, "$(P)$(R)ScanID")
+# # TopicID string
+record(waveform, "$(P)$(R)TopicID")
 {
     field(DTYP, "asynOctetWrite")
     field(PINI, "YES")
-    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SCAN_ID")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))TOPIC_ID")
     field(FTVL, "CHAR")
     field(NELM, "256")
 }
@@ -19,7 +19,7 @@ record(waveform, "$(P)$(R)ScanID")
 # # ScanID readback
 record(waveform, "$(P)$(R)ScanID_RBV") {
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SCAN_ID")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))TOPIC_ID")
   field(FTVL, "CHAR")
   field(NELM, "256")
   field(SCAN, "I/O Intr")

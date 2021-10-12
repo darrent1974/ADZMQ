@@ -1,2 +1,2 @@
-$(P)$(R)ScanID
+$(P)$(R)TopicID
 file "NDPluginBase_settings.req", P=$(P), R=$(R)
